@@ -95,19 +95,90 @@ $("#document-toggle").click(function () {
   $("#myScrollspy").toggleClass("close");
   $(".document-header").toggleClass("close-header");
 });
-
 $(document).ready(function () {
-  // Initially hide the form
   $("#form-password").hide();
 
-  // Listen for change event on radio buttons
   $("input[name='private']").change(function () {
+    console.log("Selected value: ", $(this).val()); // Debug
+
     if ($(this).val() === "1") {
-      // Show the form if the selected value is 1
       $("#form-password").show();
     } else {
-      // Hide the form if the selected value is not 1
       $("#form-password").hide();
     }
+  });
+
+  $("input[name='private']:checked").change();
+});
+
+$(document).ready(function () {
+  $("#edit-form").click(function () {
+    var hashId = $(this).attr("hash-id");
+    if (hashId !== undefined) {
+      var redirectURL = "index.php?page=edit&hash_id=" + hashId;
+      window.location.href = redirectURL;
+    } else {
+      console.error("hash-id attribute is not defined on the button.");
+    }
+  });
+});
+
+$(document).ready(function () {
+  $("#delete-file").click(function (e) {
+    e.preventDefault();
+    let hash_id = $(this).attr("hash-id");
+    if (confirm("Are you sure you want to delete this file?")) {
+      $.ajax({
+        url: "api/delete.php?hash_id=" + hash_id,
+        type: "DELETE",
+        success: function (response) {
+          swal({
+            title: "Record Deleted",
+            text: "Record Sucessfully Deleted!",
+            icon: "success",
+          }).then(function () {
+            location.reload();
+          });
+        },
+        error: function (xhr, status, error) {
+          swal({
+            title: "Failed to Delete",
+            text: "Delete Record Failed!",
+            icon: "danger",
+          }).then(function () {
+            location.reload();
+          });
+          console.log(error);
+        },
+      });
+    }
+  });
+});
+
+$(document).ready(function () {
+  $("#edit-file").click(function (e) {
+    // window.location.reload();
+
+    e.preventDefault();
+    var formData = new FormData($("form")[0]);
+    $.ajax({
+      url: "/api/edit.php",
+      type: "POST",
+      data: formData,
+      contentType: false,
+      processData: false,
+      success: function (response) {
+        swal({
+          title: "Record Updated",
+          text: "Record Sucessfully Updated!",
+          icon: "success",
+        }).then(function () {
+          location.reload();
+        });
+      },
+      error: function (error) {
+        swal("Failed to Update!", "Record Failed Updated", "danger");
+      },
+    });
   });
 });

@@ -17,23 +17,33 @@ $maxFileSize = 30 * 1024 * 1024; // 30 MB
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check if the file was uploaded without errors
     if (isset($_FILES['fileToUpload']) && $_FILES['fileToUpload']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = __DIR__ . '/../uploaded_files/';
+
         $originalFileName = basename($_FILES['fileToUpload']['name']);
         $fileExtension = pathinfo($originalFileName, PATHINFO_EXTENSION);
-        $hashedFilename = md5(uniqid()) . '.' . $fileExtension;
-        $filePath = $uploadDir . $hashedFilename;
+        $hash_id = md5(uniqid());
+        $uploadDir = __DIR__ . '/../uploaded_files/' . $hash_id;
+        $filePath = $uploadDir . '/' . $originalFileName;
+
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true); // The third parameter true ensures that any missing parent directories are also created
+        }
 
         $private = isset($_POST['private']) ? intval($_POST['private']) : 0;
-        $password = isset($_POST['password']) ? $_POST['password'] : '';
-        $description = isset($_POST['description']) ? $_POST['description'] : '';
+        if (isset($_POST['password'])) {
+            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        } else {
+            $password = '';
+        }
+        $description = isset($_POST['desc']) ? $_POST['desc'] : '';
 
         if ($_FILES['fileToUpload']['size'] <= $maxFileSize) {
             // Move the uploaded file to the destination directory
             $private = ($private == 1 && $password !== '') ? 1 : 0;
             if (move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $filePath)) {
                 $data = [
+                    "title" => $_POST['title'],
                     "name" => $originalFileName,
-                    "hash_id" => $hashedFilename,
+                    "hash_id" => $hash_id,
                     "user_id" => $_SESSION['user_id'],
                     "description" => $description,
                     "private" => $private,

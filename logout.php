@@ -7,4 +7,6 @@ $_SESSION = array();
 // Destroy the session
 session_destroy();
 
-?>
+
+header('Location:  auth.php');
+exit();

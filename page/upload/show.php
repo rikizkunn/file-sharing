@@ -2,7 +2,7 @@
     <div class="page-header">
         <div class="row">
             <div class="col-lg-6 main-header">
-                <h2>Upload Files</h2>
+                <h2>My Files</h2>
             </div>
             <div class="col-lg-6 breadcrumb-right">
                 <ol class="breadcrumb">
@@ -11,8 +11,8 @@
                             <i class="pe-7s-home"></i>
                         </a>
                     </li>
-                    <li class="breadcrumb-item">PDF</li>
-                    <li class="breadcrumb-item">Daftar Dokumen</li>
+                    <li class="breadcrumb-item">Upload</li>
+                    <li class="breadcrumb-item">My Files</li>
                 </ol>
             </div>
         </div>
@@ -24,9 +24,8 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h5>Zero Configuration</h5>
-                    <span>DataTables has most features enabled by default, so all you need to do to use it with your own tables is to call the construction function:<code>$().DataTable();</code>.</span>
-                    <span>Searching, ordering, and paging goodness will be immediately added to the table, as shown in this example.</span>
+                    <h5>My Files</h5>
+                    <span>recently uploaded files.</span>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -48,16 +47,16 @@
                                         $formattedDate = date('d M Y', strtotime($file['created_at']));
                                         $sizeInKB = round($file['size'] / 1024, 2);
                                         $description = !empty($file['description']) ? $file['description'] : 'No description available';
-
                                         echo '
                                         <tr>
-                                        <td><a href="terngehekngehek">' . $file['name'] . '</a></td>
+                                        <td><span class="fa fa-eye"></span> <a href="/f/?hash_id=' . $file['hash_id'] . '">' . $file['title'] . '</a></td>
                                             <td>' . $description . '</td>
                                             <td>' . $sizeInKB . '</td>
                                             <td>' . $formattedDate . '</td>
-                                            <td>
-                                                <button class="btn btn-sm btn-info">Edit</button>
-                                                <button class="btn btn-sm btn-danger">Delete</button>
+                                            <td >
+                                            <button id="edit-form" hash-id="' . $file['hash_id'] . '" class="btn btn-info btn-lg"><span class="fa fa-edit"></span> </button>
+                                            <button type="button" id="delete-file" hash-id="' . $file['hash_id'] . '" class="btn btn-danger btn-lg"><span class="fa fa-trash"></span> </button>
+                                            
                                             </td>
                                         </tr>
                                         ';

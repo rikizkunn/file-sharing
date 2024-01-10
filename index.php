@@ -15,7 +15,6 @@ ini_set('post_max_size', 100);
 
 define('ROOT_PATH', dirname(__DIR__) . '/htdocs/');
 define('UPLOAD_PATH', './uploaded_files/');
-// var_dump(ROOT_PATH);
 
 require_once(ROOT_PATH . 'database/init_db.php');
 $db = new fileSharing("localhost", "safe_pdf", "root", "");

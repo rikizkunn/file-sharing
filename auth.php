@@ -10,7 +10,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $username = $_POST['username'];
   $password = $_POST['password'];
 
-  $data = $db->login($username, $password);
+  if ($_POST['auth'] == 'login') {
+    $data = $db->login($username, $password);
+  } else if ($_POST['auth'] == 'register') {
+    $data = $db->register($username, $password);
+  } else {
+    $data = 'ngapain';
+  }
 }
 
 ?>
@@ -24,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta name="description" content="Poco admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
   <link rel="icon" href="../assets/images/favicon.png" type="image/x-icon">
   <link rel="shortcut icon" href="../assets/images/favicon.png" type="image/x-icon">
-  <title>Dokumen - ShareKeun</title>
+  <title>Login - ShareKeun</title>
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="../assets/css/fontawesome.css">
   <link rel="stylesheet" type="text/css" href="../assets/css/icofont.css">
@@ -51,9 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="authentication-main">
         <div class="row">
           <div class="col-md-12">
-
             <div class="auth-innerright">
-
               <div class="authentication-box">
                 <div class="card-body p-0">
                   <div class="cont text-center">
@@ -62,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                       <form method="POST" action="auth.php" class="theme-form">
                         <h4>Login </h4>
                         <h6>Enter your Username and Password</h6>
-                        <?php echo $data ?>
+                        <?php echo $data['message'] ?>
                         <div class="form-group">
                           <label class="col-form-label pt-0">Username</label>
                           <input class="form-control" name="username" type="text" required="">
@@ -76,6 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                           <label for="checkbox1">Remember me</label>
                         </div>
                         <div class="form-group form-row mt-3 mb-0">
+                          <input type="hidden" name="auth" value="login">
                           <button class="btn btn-primary btn-block" type="submit">LOGIN</button>
                         </div>
                         <hr>
@@ -98,9 +103,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                       </div>
                       <div>
                         <!-- REGISTER FORM -->
-                        <form class="theme-form">
+                        <form action="auth.php" method="POST" class="theme-form">
                           <h4 class="text-center">NEW USER</h4>
                           <h6 class="text-center">Enter your Username and Password For Signup</h6>
+                          <?php echo $data['message']; ?>
                           <div class="form-group">
                             <input class="form-control" name="username" type="text" placeholder="User Name">
                           </div>
@@ -109,6 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                           </div>
                           <div class="form-row">
                             <div class="col-sm-4">
+                              <input type="hidden" name="auth" value="register">
                               <button class="btn btn-primary" type="submit">Sign Up</button>
                             </div>
                           </div>

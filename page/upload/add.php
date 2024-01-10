@@ -11,8 +11,8 @@
               <i class="pe-7s-home"></i>
             </a>
           </li>
-          <li class="breadcrumb-item">PDF</li>
-          <li class="breadcrumb-item">Daftar Dokumen</li>
+          <li class="breadcrumb-item">Upload</li>
+          <li class="breadcrumb-item">Upload Page</li>
         </ol>
       </div>
     </div>
